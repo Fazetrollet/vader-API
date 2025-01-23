@@ -1,6 +1,5 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import CurrentResult from './components/CurrentResult.vue'
 import WeatherView from './views/WeatherView.vue'
 
 const weather = ref('Sunny, 25°C')
@@ -42,36 +41,6 @@ onMounted(() => {
 
   <main>
     <WeatherView id="weather-view" />
-    <CurrentResult :weather="weather" />
-    <table class="weather-table">
-      <thead>
-        <tr>
-          <th>Temperature</th>
-          <th>Condition</th>
-          <th>Humidity</th>
-          <th>Wind Speed</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{{ temperature }}°C</td>
-          <td>{{ condition }}</td>
-          <td>{{ humidity }}%</td>
-          <td>{{ windSpeed }} km/h</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="live-video">
-      <h2>Live Weather in Mariehamn</h2>
-      <iframe
-        width="100%"
-        height="100%"
-        src="https://www.youtube.com/embed/y0ChIkyJavE"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-      ></iframe>
-    </div>
     <button @click="refreshWeather">Refresh Weather</button>
   </main>
 </template>
@@ -96,28 +65,10 @@ nav a:hover {
   text-decoration: underline;
 }
 
-.weather-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 2rem;
-}
-
-.weather-table th,
-.weather-table td {
-  border: 1px solid #ccc;
-  padding: 0.5rem;
-  text-align: center;
-}
-
-.live-video {
-  margin-top: 20px;
-}
-
-.live-video iframe {
-  width: 100%;
-  height: auto;
-  border: 2px solid #ccc;
-  border-radius: 8px;
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 button {

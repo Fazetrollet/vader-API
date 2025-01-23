@@ -29,6 +29,24 @@
             {{ windSpeed }} km/h
           </td>
         </tr>
+        <tr>
+          <td>
+            <img src="https://img.icons8.com/ios-filled/50/000000/thermometer.png" alt="Temperature Icon" />
+            22°C
+          </td>
+          <td>
+            <img src="https://img.icons8.com/ios-filled/50/000000/cloud.png" alt="Condition Icon" />
+            Cloudy
+          </td>
+          <td>
+            <img src="https://img.icons8.com/ios-filled/50/000000/humidity.png" alt="Humidity Icon" />
+            65%
+          </td>
+          <td>
+            <img src="https://img.icons8.com/ios-filled/50/000000/wind.png" alt="Wind Speed Icon" />
+            10 km/h
+          </td>
+        </tr>
       </tbody>
     </table>
     <div class="live-video">
