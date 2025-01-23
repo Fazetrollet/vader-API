@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import CurrentResult from './components/CurrentResult.vue'
+import WeatherView from './views/WeatherView.vue'
 
 const weather = ref('Sunny, 25°C')
 const temperature = ref('25')
@@ -34,9 +35,13 @@ onMounted(() => {
 <template>
   <header>
     <h1>Weather App</h1>
+    <nav>
+      <a href="#weather-view">Go to Weather Details</a>
+    </nav>
   </header>
 
   <main>
+    <WeatherView id="weather-view" />
     <CurrentResult :weather="weather" />
     <table class="weather-table">
       <thead>
@@ -75,6 +80,20 @@ onMounted(() => {
 header {
   text-align: center;
   margin-bottom: 2rem;
+}
+
+nav {
+  margin-top: 1rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: #42b983;
+  font-weight: bold;
+}
+
+nav a:hover {
+  text-decoration: underline;
 }
 
 .weather-table {
