@@ -15,6 +15,10 @@ const fetchWeather = async () => {
   }
 };
 
+const refreshWeather = () => {
+  fetchWeather();
+};
+
 onMounted(() => {
   fetchWeather();
 });
@@ -26,6 +30,7 @@ onMounted(() => {
 
   <WeatherView />
   <CurrentResult :weather="weather" />
+  <button @click="refreshWeather">Refresh Weather</button>
 </template>
 
 <style scoped>
