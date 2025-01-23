@@ -10,7 +10,7 @@ const fetchWeather = async () => {
     const data = await response.json()
     weather.value = `${data.condition}, ${data.temperature}°C`
   } catch (error) {
-    weather.value = 'Error fetching weather data'
+    console.error('Error fetching weather data', error)
   }
 }
 

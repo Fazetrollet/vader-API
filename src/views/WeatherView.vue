@@ -49,10 +49,7 @@ export default {
       this.humidity = data.humidity
       this.windSpeed = data.windSpeed
     } catch (error) {
-      this.temperature = 'Error'
-      this.condition = 'Error'
-      this.humidity = 'Error'
-      this.windSpeed = 'Error'
+      console.error('Error fetching weather data', error)
     }
   },
 }
