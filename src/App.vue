@@ -79,7 +79,8 @@ header {
   margin-bottom: 2rem;
 }
 
-.weather-table th, .weather-table td {
+.weather-table th,
+.weather-table td {
   border: 1px solid #ccc;
   padding: 0.5rem;
   text-align: center;
