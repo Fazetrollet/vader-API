@@ -8,7 +8,7 @@
     <div class="live-video">
       <h2>Live Weather in Mariehamn</h2>
       <video controls autoplay muted>
-        <source src="https://example.com/mariehamn-live.mp4" type="video/mp4">
+        <source src="https://www.youtube.com/watch?v=y0ChIkyJavE" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
     </div>
@@ -23,24 +23,24 @@ export default {
       temperature: 'Loading...',
       condition: 'Loading...',
       humidity: 'Loading...',
-      windSpeed: 'Loading...'
-    };
+      windSpeed: 'Loading...',
+    }
   },
   async mounted() {
     try {
-      const response = await fetch('https://api.example.com/weather/details');
-      const data = await response.json();
-      this.temperature = data.temperature;
-      this.condition = data.condition;
-      this.humidity = data.humidity;
-      this.windSpeed = data.windSpeed;
+      const response = await fetch('https://api.example.com/weather/details')
+      const data = await response.json()
+      this.temperature = data.temperature
+      this.condition = data.condition
+      this.humidity = data.humidity
+      this.windSpeed = data.windSpeed
     } catch (error) {
-      this.temperature = 'Error';
-      this.condition = 'Error';
-      this.humidity = 'Error';
-      this.windSpeed = 'Error';
+      this.temperature = 'Error'
+      this.condition = 'Error'
+      this.humidity = 'Error'
+      this.windSpeed = 'Error'
     }
-  }
+  },
 }
 </script>
 

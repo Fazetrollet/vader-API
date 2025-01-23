@@ -1,38 +1,35 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import WeatherView from './views/WeatherView.vue';
-import CurrentResult from './components/CurrentResult.vue';
+import { ref, onMounted } from 'vue'
+import WeatherView from './views/WeatherView.vue'
+import CurrentResult from './components/CurrentResult.vue'
 
-const weather = ref('Loading...');
+const weather = ref('Loading...')
 
 const fetchWeather = async () => {
   try {
-    const response = await fetch('https://api.example.com/weather');
-    const data = await response.json();
-    weather.value = `${data.condition}, ${data.temperature}°C`;
+    const response = await fetch('https://api.example.com/weather')
+    const data = await response.json()
+    weather.value = `${data.condition}, ${data.temperature}°C`
   } catch (error) {
-    weather.value = 'Error fetching weather data';
+    weather.value = 'Error fetching weather data'
   }
-};
+}
 
 const refreshWeather = () => {
-  fetchWeather();
-};
+  fetchWeather()
+}
 
 onMounted(() => {
-  fetchWeather();
-});
+  fetchWeather()
+})
 </script>
 
 <template>
-  <header>
-  </header>
+  <header></header>
 
   <WeatherView />
   <CurrentResult :weather="weather" />
   <button @click="refreshWeather">Refresh Weather</button>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
