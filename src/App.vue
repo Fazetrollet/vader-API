@@ -60,7 +60,7 @@ onMounted(() => {
       <h2>Live Weather in Mariehamn</h2>
       <iframe
         width="100%"
-        height="auto"
+        height="100%"
         src="https://www.youtube.com/embed/y0ChIkyJavE"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
