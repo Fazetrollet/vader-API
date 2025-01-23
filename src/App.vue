@@ -57,7 +57,7 @@ onMounted(() => {
       </tbody>
     </table>
     <div class="live-video">
-      <h2>Live Weather in Mariehamn</h2>
+      <h2>Live Weather in Mariehamn test</h2>
       <iframe width="100%" height="100%" src="https://www.youtube.com/embed/y0ChIkyJavE" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
     <button @click="refreshWeather">Refresh Weather</button>
