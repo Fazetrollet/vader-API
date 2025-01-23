@@ -1,10 +1,24 @@
 <template>
   <div class="weather-view">
     <h1>Weather Details</h1>
-    <p>Temperature: {{ temperature }}°C</p>
-    <p>Condition: {{ condition }}</p>
-    <p>Humidity: {{ humidity }}%</p>
-    <p>Wind Speed: {{ windSpeed }} km/h</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Temperature</th>
+          <th>Condition</th>
+          <th>Humidity</th>
+          <th>Wind Speed</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ temperature }}°C</td>
+          <td>{{ condition }}</td>
+          <td>{{ humidity }}%</td>
+          <td>{{ windSpeed }} km/h</td>
+        </tr>
+      </tbody>
+    </table>
     <div class="live-video">
       <h2>Live Weather in Mariehamn</h2>
       <video controls autoplay muted>
