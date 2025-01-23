@@ -52,7 +52,7 @@ onMounted(() => {
           <td>{{ temperature }}°C</td>
           <td>{{ condition }}</td>
           <td>{{ humidity }}%</td>
-          <td>{{ windSpeed }} km/hh</td>
+          <td>{{ windSpeed }} km/h</td>
         </tr>
       </tbody>
     </table>
