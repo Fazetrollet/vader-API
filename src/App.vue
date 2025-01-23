@@ -58,10 +58,7 @@ onMounted(() => {
     </table>
     <div class="live-video">
       <h2>Live Weather in Mariehamn</h2>
-      <video controls autoplay muted>
-        <source src="https://www.youtube.com/watch?v=y0ChIkyJavE" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      <iframe width="100%" height="auto" src="https://www.youtube.com/embed/y0ChIkyJavE" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
     <button @click="refreshWeather">Refresh Weather</button>
   </main>
@@ -90,7 +87,7 @@ header {
   margin-top: 20px;
 }
 
-.live-video video {
+.live-video iframe {
   width: 100%;
   height: auto;
   border: 2px solid #ccc;
