@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import WeatherView from './views/WeatherView.vue'
-import WeeklyWeather from './components/WeeklyWeather.vue'
+
 
 const weather = ref('Sunny, 25°C')
 const temperature = ref('25')
