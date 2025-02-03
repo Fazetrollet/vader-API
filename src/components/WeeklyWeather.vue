@@ -42,10 +42,12 @@ onMounted(async () => {
     const today = new Date()
     const weekFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)
 
+    /*
     const datefrom = today.toISOString().split('T')[0]
     const dateto = weekFromNow.toISOString().split('T')[0]
+    */
 
-    const url = `http://10.15.1.39/~60914/VaderApp-Backend/weather/${datefrom}/${dateto}`
+    const url = `http://10.15.1.39/~60914/VaderApp-Backend/`
     const requestOptions = {
       method: 'GET',
       headers: {

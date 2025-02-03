@@ -43,7 +43,7 @@ const formatNumber = (num) => {
 
 onMounted(async () => {
   try {
-    const response = await fetch('http://10.15.1.39/~60914/VaderApp-Backend/weather/now')
+    const response = await fetch('http://10.15.1.39/~60914/VaderApp-Backend/')
     const data = await response.json()
     weather.value = data
   } catch (error) {
