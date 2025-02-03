@@ -4,18 +4,20 @@
     <table class="weather-table">
       <thead>
         <tr>
-          <th>Date</th>
+          <th>From</th>
+          <th>To</th>
           <th>Temperature (°C)</th>
           <th>Humidity (%)</th>
           <th>Pressure (hPa)</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(reading, index) in weeklyData" :key="index">
-          <td>{{ formatDate(reading.datetime || reading.datetimefrom) }}</td>
-          <td>{{ formatNumber(reading.temperature) }}</td>
-          <td>{{ formatNumber(reading.humidity) }}</td>
-          <td>{{ formatNumber(reading.pressure) }}</td>
+        <tr v-if="weeklyData">
+          <td>{{ formatDate(weeklyData.datetimefrom) }}</td>
+          <td>{{ formatDate(weeklyData.datetimeto) }}</td>
+          <td>{{ formatNumber(weeklyData.temperature) }}</td>
+          <td>{{ formatNumber(weeklyData.humidity) }}</td>
+          <td>{{ formatNumber(weeklyData.pressure) }}</td>
         </tr>
       </tbody>
     </table>
@@ -24,14 +26,15 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-const weeklyData = ref([])
+const weeklyData = ref(null)
 
 const formatDate = (dateStr) => {
+  if (!dateStr) return ''
   return new Date(dateStr).toLocaleString()
 }
 
 const formatNumber = (num) => {
-  return Number(num).toFixed(1)
+  return typeof num === 'number' ? num.toFixed(1) : '0.0'
 }
 
 onMounted(async () => {
@@ -42,19 +45,15 @@ onMounted(async () => {
     const datefrom = today.toISOString().split('T')[0]
     const dateto = weekFromNow.toISOString().split('T')[0]
 
-    const response = await fetch(`http://10.15.1.39/~60914/VaderApp-Backend/weather/${datefrom}/${dateto}`, {
-      method: 'POST',
+    const url = `http://10.15.1.39/~60914/VaderApp-Backend/weather/${datefrom}/${dateto}`
+    const requestOptions = {
+      method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        interval: 60,
-        humidity: true,
-        temperature: true,
-        pressure: true
-      })
-    })
+        'Content-Type': 'application/json'
+      }
+    }
 
+    const response = await fetch(url, requestOptions)
     weeklyData.value = await response.json()
   } catch (error) {
     console.error('Error fetching weekly weather data', error)

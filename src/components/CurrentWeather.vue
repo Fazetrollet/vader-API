@@ -28,22 +28,24 @@ import { ref, onMounted } from 'vue'
 const weather = ref({
   datetime: '',
   temperature: 0,
-  humidity: 0,
-  pressure: 0
+  pressure: 0,
+  humidity: 0
 })
 
 const formatDate = (dateStr) => {
+  if (!dateStr) return ''
   return new Date(dateStr).toLocaleString()
 }
 
 const formatNumber = (num) => {
-  return Number(num).toFixed(1)
+  return typeof num === 'number' ? num.toFixed(1) : '0.0'
 }
 
 onMounted(async () => {
   try {
     const response = await fetch('http://10.15.1.39/~60914/VaderApp-Backend/weather/now')
-    weather.value = await response.json()
+    const data = await response.json()
+    weather.value = data
   } catch (error) {
     console.error('Error fetching current weather', error)
   }
