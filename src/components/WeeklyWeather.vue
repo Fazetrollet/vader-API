@@ -22,29 +22,22 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'WeeklyWeather',
-  data() {
-    return {
-      weeklyData: []
-    }
-  },
-  async mounted() {
-    try {
-      // Hardcoded date range and query parameters; adjust as needed.
-      const datefrom = '2023-10-01'
-      const dateto = '2023-10-07'
-      const query = '?interval=15&humidity=true&temperature=true&pressure=true'
-      const response = await fetch(`https://api.example.com/weather/${datefrom}/${dateto}${query}`)
-      const data = await response.json()
-      // Assuming response is an array of readings.
-      this.weeklyData = data
-    } catch (error) {
-      console.error('Error fetching weekly weather data', error)
-    }
+<script setup>
+import { ref, onMounted } from 'vue'
+const weeklyData = ref([])
+
+onMounted(async () => {
+  try {
+    // Hardcoded date range and query parameters; adjust as needed.
+    const datefrom = '2023-10-01'
+    const dateto = '2023-10-07'
+    const query = '?interval=15&humidity=true&temperature=true&pressure=true'
+    const response = await fetch(`https://api.example.com/weather/${datefrom}/${dateto}${query}`)
+    weeklyData.value = await response.json()
+  } catch (error) {
+    console.error('Error fetching weekly weather data', error)
   }
-}
+})
 </script>
 
 <style scoped>

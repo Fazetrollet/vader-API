@@ -22,29 +22,23 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'CurrentWeather',
-  data() {
-    return {
-      weather: {
-        datetime: '',
-        temperature: '',
-        humidity: '',
-        pressure: ''
-      }
-    }
-  },
-  async mounted() {
-    try {
-      const response = await fetch('https://api.example.com/weather/now')
-      const data = await response.json()
-      this.weather = data
-    } catch (error) {
-      console.error('Error fetching current weather', error)
-    }
+<script setup>
+import { ref, onMounted } from 'vue'
+const weather = ref({
+  datetime: '',
+  temperature: '',
+  humidity: '',
+  pressure: ''
+})
+
+onMounted(async () => {
+  try {
+    const response = await fetch('https://api.example.com/weather/now')
+    weather.value = await response.json()
+  } catch (error) {
+    console.error('Error fetching current weather', error)
   }
-}
+})
 </script>
 
 <style scoped>
