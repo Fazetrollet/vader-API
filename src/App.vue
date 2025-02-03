@@ -1,5 +1,4 @@
 <script setup>
-<script setup>
 import { ref } from 'vue'
 import CurrentWeather from './components/CurrentWeather.vue'
 import WeeklyWeather from './components/WeeklyWeather.vue'
