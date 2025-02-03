@@ -12,10 +12,10 @@
       </thead>
       <tbody>
         <tr v-for="(reading, index) in weeklyData" :key="index">
-          <td>{{ new Date(reading.datetimefrom).toLocaleDateString() }}</td>
-          <td>{{ reading.temperature }}</td>
-          <td>{{ reading.humidity }}</td>
-          <td>{{ reading.pressure }}</td>
+          <td>{{ formatDate(reading.datetime || reading.datetimefrom) }}</td>
+          <td>{{ formatNumber(reading.temperature) }}</td>
+          <td>{{ formatNumber(reading.humidity) }}</td>
+          <td>{{ formatNumber(reading.pressure) }}</td>
         </tr>
       </tbody>
     </table>
@@ -26,13 +26,35 @@
 import { ref, onMounted } from 'vue'
 const weeklyData = ref([])
 
+const formatDate = (dateStr) => {
+  return new Date(dateStr).toLocaleString()
+}
+
+const formatNumber = (num) => {
+  return Number(num).toFixed(1)
+}
+
 onMounted(async () => {
   try {
-    // Hardcoded date range and query parameters; adjust as needed.
-    const datefrom = '2023-10-01'
-    const dateto = '2023-10-07'
-    const query = '?interval=15&humidity=true&temperature=true&pressure=true'
-    const response = await fetch(`https://api.example.com/weather/${datefrom}/${dateto}${query}`)
+    const today = new Date()
+    const weekFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)
+
+    const datefrom = today.toISOString().split('T')[0]
+    const dateto = weekFromNow.toISOString().split('T')[0]
+
+    const response = await fetch(`http://10.15.1.39/~60914/VaderApp-Backend/weather/${datefrom}/${dateto}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        interval: 60,
+        humidity: true,
+        temperature: true,
+        pressure: true
+      })
+    })
+
     weeklyData.value = await response.json()
   } catch (error) {
     console.error('Error fetching weekly weather data', error)
