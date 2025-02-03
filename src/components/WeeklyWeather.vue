@@ -39,10 +39,12 @@ const formatNumber = (num) => {
 
 onMounted(async () => {
   try {
+
+    /*
     const today = new Date()
     const weekFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)
 
-    /*
+    
     const datefrom = today.toISOString().split('T')[0]
     const dateto = weekFromNow.toISOString().split('T')[0]
     */
