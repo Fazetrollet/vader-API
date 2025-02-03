@@ -39,28 +39,18 @@ const formatNumber = (num) => {
 
 onMounted(async () => {
   try {
-
-    /*
-    const today = new Date()
-    const weekFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)
-
-    
-    const datefrom = today.toISOString().split('T')[0]
-    const dateto = weekFromNow.toISOString().split('T')[0]
-    */
-
-    const url = `http://10.15.1.39/~60914/VaderApp-Backend/`
-    const requestOptions = {
+    const response = await fetch('http://10.15.1.39/~60914/VaderApp-Backend', {
       method: 'GET',
+      mode: 'cors',
       headers: {
-        'Content-Type': 'application/json'
+        'Accept': 'application/json'
       }
-    }
-
-    const response = await fetch(url, requestOptions)
+    })
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
     weeklyData.value = await response.json()
   } catch (error) {
-    console.error('Error fetching weekly weather data', error)
+    console.error('Error fetching weekly weather data:', error)
+    weeklyData.value = null
   }
 })
 </script>

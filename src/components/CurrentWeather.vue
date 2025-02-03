@@ -43,11 +43,24 @@ const formatNumber = (num) => {
 
 onMounted(async () => {
   try {
-    const response = await fetch('http://10.15.1.39/~60914/VaderApp-Backend/')
+    const response = await fetch('http://10.15.1.39/~60914/VaderApp-Backend', {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
     const data = await response.json()
     weather.value = data
   } catch (error) {
-    console.error('Error fetching current weather', error)
+    console.error('Error fetching current weather:', error)
+    weather.value = {
+      datetime: new Date().toISOString(),
+      temperature: 0,
+      pressure: 0,
+      humidity: 0
+    }
   }
 })
 </script>
