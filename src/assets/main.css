@@ -6,6 +6,10 @@
   --section-bg: #ffffff;
   --primary-color: #42b983;
   --secondary-color: #369f6b;
+  --table-border-radius: 12px;
+  --table-header-bg: #42b983;
+  --table-row-hover: rgba(66, 185, 131, 0.1);
+  --animation-duration: 0.3s;
 }
 
 * {
@@ -22,10 +26,27 @@ body {
   background: var(--bg-color);
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.animate-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
 .dark-mode {
   --bg-color: #1a1a1a;
   --text-color: #ffffff;
   --section-bg: #2d2d2d;
+  --table-header-bg: #2d2d2d;
+  --table-row-hover: rgba(255, 255, 255, 0.05);
 }
 
 #app {

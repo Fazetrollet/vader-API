@@ -1,8 +1,8 @@
 <template>
-  <div class="current-weather" :class="{ loading: !weather.temperature }">
+  <div class="current-weather animate-in" :class="{ loading: !weather.temperature }">
     <h2>Current Weather</h2>
     <div class="weather-card-content">
-      <div class="temperature-display">
+      <div class="temperature-display" :class="{ 'pulse-animation': weather.temperature }">
         <span class="temp-number">{{ formatNumber(weather.temperature) }}°</span>
         <div class="weather-icon">
           {{ getWeatherIcon(weather.temperature) }}
@@ -10,22 +10,14 @@
       </div>
 
       <div class="weather-details">
-        <div class="detail-item">
-          <span class="label">Humidity</span>
+        <div class="detail-item" v-for="(item, index) in details" :key="index"
+             :style="{ animationDelay: `${index * 0.1}s` }">
+          <span class="label">{{ item.label }}</span>
           <div class="value-wrapper">
-            <span class="value">{{ formatNumber(weather.humidity) }}%</span>
-            <div class="progress-bar" :style="`width: ${weather.humidity}%`"></div>
+            <span class="value">{{ item.value }}</span>
+            <div v-if="item.progress" class="progress-bar"
+                 :style="`width: ${item.progress}%`"></div>
           </div>
-        </div>
-
-        <div class="detail-item">
-          <span class="label">Pressure</span>
-          <span class="value">{{ formatNumber(weather.pressure) }} hPa</span>
-        </div>
-
-        <div class="detail-item">
-          <span class="label">Last Updated</span>
-          <span class="value">{{ formatDate(weather.datetime) }}</span>
         </div>
       </div>
     </div>
@@ -33,7 +25,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 
 const weather = ref({
   datetime: '',
@@ -58,6 +50,22 @@ const getWeatherIcon = (temp) => {
   if (temp <= 20) return '☀️'
   return '🌡️'
 }
+
+const details = computed(() => [
+  {
+    label: 'Humidity',
+    value: `${formatNumber(weather.value.humidity)}%`,
+    progress: weather.value.humidity
+  },
+  {
+    label: 'Pressure',
+    value: `${formatNumber(weather.value.pressure)} hPa`
+  },
+  {
+    label: 'Last Updated',
+    value: formatDate(weather.value.datetime)
+  }
+])
 
 onMounted(async () => {
   try {
@@ -99,10 +107,27 @@ onMounted(async () => {
 }
 
 .temperature-display {
+  position: relative;
+  padding: 2rem;
+  background: rgba(66, 185, 131, 0.1);
+  border-radius: 50%;
+  margin: 2rem auto;
+  width: 200px;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  flex-direction: column;
+}
+
+.temperature-display::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 2px solid var(--primary-color);
+  opacity: 0.5;
+  animation: pulse 2s infinite;
 }
 
 .temp-number {
@@ -128,6 +153,8 @@ onMounted(async () => {
   padding: 0.5rem;
   background: rgba(0, 0, 0, 0.05);
   border-radius: 8px;
+  animation: fadeIn var(--animation-duration) ease-out forwards;
+  opacity: 0;
 }
 
 .label {
@@ -154,6 +181,10 @@ onMounted(async () => {
 .loading {
   opacity: 0.7;
   pointer-events: none;
+}
+
+.pulse-animation {
+  animation: pulse 2s infinite;
 }
 
 @media (max-width: 768px) {

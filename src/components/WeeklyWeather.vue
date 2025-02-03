@@ -1,26 +1,28 @@
 <template>
-  <div class="weekly-weather">
-    <h1>Weekly Weather</h1>
-    <table class="weather-table">
-      <thead>
-        <tr>
-          <th>From</th>
-          <th>To</th>
-          <th>Temperature (°C)</th>
-          <th>Humidity (%)</th>
-          <th>Pressure (hPa)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-if="weeklyData">
-          <td>{{ formatDate(weeklyData.datetimefrom) }}</td>
-          <td>{{ formatDate(weeklyData.datetimeto) }}</td>
-          <td>{{ formatNumber(weeklyData.temperature) }}</td>
-          <td>{{ formatNumber(weeklyData.humidity) }}</td>
-          <td>{{ formatNumber(weeklyData.pressure) }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="weekly-weather animate-in">
+    <h2>Weekly Weather</h2>
+    <div class="table-container">
+      <table class="weather-table">
+        <thead>
+          <tr>
+            <th>From</th>
+            <th>To</th>
+            <th>Temperature (°C)</th>
+            <th>Humidity (%)</th>
+            <th>Pressure (hPa)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-if="weeklyData">
+            <td>{{ formatDate(weeklyData.datetimefrom) }}</td>
+            <td>{{ formatDate(weeklyData.datetimeto) }}</td>
+            <td>{{ formatNumber(weeklyData.temperature) }}</td>
+            <td>{{ formatNumber(weeklyData.humidity) }}</td>
+            <td>{{ formatNumber(weeklyData.pressure) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -59,19 +61,61 @@ onMounted(async () => {
 .weekly-weather {
   text-align: center;
   padding: 2rem;
-  width: 80%;
-  margin-bottom: 2rem;
+  width: 100%;
 }
+
+.table-container {
+  overflow-x: auto;
+  border-radius: var(--table-border-radius);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 .weather-table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--section-bg);
 }
-.weather-table th,
-.weather-table td {
-  border: 1px solid #ccc;
+
+.weather-table th {
+  background: var(--table-header-bg);
+  color: white;
   padding: 1rem;
-  text-align: center;
-  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+}
+
+.weather-table td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  transition: all var(--animation-duration) ease;
+}
+
+.weather-table tr:hover td {
+  background: var(--table-row-hover);
+}
+
+.weather-table th:first-child {
+  border-top-left-radius: var(--table-border-radius);
+}
+
+.weather-table th:last-child {
+  border-top-right-radius: var(--table-border-radius);
+}
+
+.weather-table tr:last-child td:first-child {
+  border-bottom-left-radius: var(--table-border-radius);
+}
+
+.weather-table tr:last-child td:last-child {
+  border-bottom-right-radius: var(--table-border-radius);
+}
+
+@media (max-width: 768px) {
+  .table-container {
+    margin: 0 -1rem;
+  }
 }
 </style>
