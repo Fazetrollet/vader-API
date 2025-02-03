@@ -1,19 +1,21 @@
 <template>
-  <div class="weekly-weather-view">
+  <div class="weekly-weather">
     <h1>Weekly Weather</h1>
     <table class="weather-table">
       <thead>
         <tr>
-          <th>Day</th>
-          <th>Temperature</th>
-          <th>Condition</th>
+          <th>Date</th>
+          <th>Temperature (°C)</th>
+          <th>Humidity (%)</th>
+          <th>Pressure (hPa)</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="day in weeklyWeather" :key="day.date">
-          <td>{{ day.date }}</td>
-          <td>{{ day.temperature }}°C</td>
-          <td>{{ day.condition }}</td>
+        <tr v-for="(reading, index) in weeklyData" :key="index">
+          <td>{{ new Date(reading.datetimefrom).toLocaleDateString() }}</td>
+          <td>{{ reading.temperature }}</td>
+          <td>{{ reading.humidity }}</td>
+          <td>{{ reading.pressure }}</td>
         </tr>
       </tbody>
     </table>
@@ -25,22 +27,19 @@ export default {
   name: 'WeeklyWeather',
   data() {
     return {
-      weeklyWeather: [
-        { date: 'Monday', temperature: '22', condition: 'Cloudy' },
-        { date: 'Tuesday', temperature: '24', condition: 'Sunny' },
-        { date: 'Wednesday', temperature: '20', condition: 'Rainy' },
-        { date: 'Thursday', temperature: '23', condition: 'Partly Cloudy' },
-        { date: 'Friday', temperature: '25', condition: 'Sunny' },
-        { date: 'Saturday', temperature: '21', condition: 'Windy' },
-        { date: 'Sunday', temperature: '19', condition: 'Stormy' }
-      ]
+      weeklyData: []
     }
   },
   async mounted() {
     try {
-      const response = await fetch('https://api.example.com/weather/weekly')
+      // Hardcoded date range and query parameters; adjust as needed.
+      const datefrom = '2023-10-01'
+      const dateto = '2023-10-07'
+      const query = '?interval=15&humidity=true&temperature=true&pressure=true'
+      const response = await fetch(`https://api.example.com/weather/${datefrom}/${dateto}${query}`)
       const data = await response.json()
-      this.weeklyWeather = data
+      // Assuming response is an array of readings.
+      this.weeklyData = data
     } catch (error) {
       console.error('Error fetching weekly weather data', error)
     }
@@ -49,21 +48,17 @@ export default {
 </script>
 
 <style scoped>
-.weekly-weather-view {
+.weekly-weather {
   text-align: center;
   padding: 2rem;
-  background: linear-gradient(to right, #83a4d4, #b6fbff);
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 80%;
+  margin-bottom: 2rem;
 }
-
 .weather-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 2rem 0;
+  margin-top: 1rem;
 }
-
 .weather-table th,
 .weather-table td {
   border: 1px solid #ccc;
