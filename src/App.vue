@@ -4,11 +4,15 @@ import CurrentWeather from './components/CurrentWeather.vue'
 import WeeklyWeather from './components/WeeklyWeather.vue'
 import VideoPlayer from './components/VideoPlayer.vue'
 
-const darkMode = ref(false)
+const darkMode = ref(window.matchMedia('(prefers-color-scheme: dark)').matches)
+const isLoading = ref(true)
 
 onMounted(() => {
-  darkMode.value = window.matchMedia('(prefers-color-scheme: dark)').matches
   document.body.classList.toggle('dark-mode', darkMode.value)
+  // Simulate loading state
+  setTimeout(() => {
+    isLoading.value = false
+  }, 1000)
 })
 
 const toggleDarkMode = () => {
@@ -22,20 +26,31 @@ const toggleDarkMode = () => {
     <header>
       <div class="header-content">
         <h1>Åland Weather</h1>
-        <button class="theme-toggle" @click="toggleDarkMode" aria-label="Toggle dark mode">
-          {{ darkMode ? '☀️' : '🌙' }}
-        </button>
+        <div class="header-controls">
+          <span class="location">📍 Mariehamn</span>
+          <button class="theme-toggle" @click="toggleDarkMode" aria-label="Toggle dark mode">
+            {{ darkMode ? '☀️' : '🌙' }}
+          </button>
+        </div>
       </div>
     </header>
 
     <main>
-      <div class="grid-layout">
+      <div class="grid-layout" :class="{ 'is-loading': isLoading }">
         <div class="weather-card">
-          <CurrentWeather />
+          <Transition name="fade">
+            <CurrentWeather v-if="!isLoading" />
+            <div v-else class="skeleton-loader"></div>
+          </Transition>
         </div>
+
         <div class="weather-card">
-          <WeeklyWeather />
+          <Transition name="fade">
+            <WeeklyWeather v-if="!isLoading" />
+            <div v-else class="skeleton-loader"></div>
+          </Transition>
         </div>
+
         <div class="weather-card video-container">
           <VideoPlayer videoId="y0ChIkyJavE" />
         </div>
@@ -148,5 +163,44 @@ main {
   .weather-card {
     padding: 2rem;
   }
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.location {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.skeleton-loader {
+  height: 200px;
+  background: linear-gradient(
+    90deg,
+    var(--section-bg) 25%,
+    rgba(129, 129, 129, 0.1) 50%,
+    var(--section-bg) 75%
+  );
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 12px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 </style>

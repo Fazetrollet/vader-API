@@ -1,24 +1,34 @@
 <template>
-  <div class="current-weather">
-    <h1>Current Weather</h1>
-    <table class="weather-table">
-      <thead>
-        <tr>
-          <th>Date/Time</th>
-          <th>Temperature (°C)</th>
-          <th>Humidity (%)</th>
-          <th>Pressure (hPa)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{{ formatDate(weather.datetime) }}</td>
-          <td>{{ formatNumber(weather.temperature) }}</td>
-          <td>{{ formatNumber(weather.humidity) }}</td>
-          <td>{{ formatNumber(weather.pressure) }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="current-weather" :class="{ loading: !weather.temperature }">
+    <h2>Current Weather</h2>
+    <div class="weather-card-content">
+      <div class="temperature-display">
+        <span class="temp-number">{{ formatNumber(weather.temperature) }}°</span>
+        <div class="weather-icon">
+          {{ getWeatherIcon(weather.temperature) }}
+        </div>
+      </div>
+
+      <div class="weather-details">
+        <div class="detail-item">
+          <span class="label">Humidity</span>
+          <div class="value-wrapper">
+            <span class="value">{{ formatNumber(weather.humidity) }}%</span>
+            <div class="progress-bar" :style="`width: ${weather.humidity}%`"></div>
+          </div>
+        </div>
+
+        <div class="detail-item">
+          <span class="label">Pressure</span>
+          <span class="value">{{ formatNumber(weather.pressure) }} hPa</span>
+        </div>
+
+        <div class="detail-item">
+          <span class="label">Last Updated</span>
+          <span class="value">{{ formatDate(weather.datetime) }}</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -27,9 +37,9 @@ import { ref, onMounted } from 'vue'
 
 const weather = ref({
   datetime: '',
-  temperature: 0,
-  pressure: 0,
-  humidity: 0
+  temperature: null,
+  pressure: null,
+  humidity: null
 })
 
 const formatDate = (dateStr) => {
@@ -39,6 +49,14 @@ const formatDate = (dateStr) => {
 
 const formatNumber = (num) => {
   return typeof num === 'number' ? num.toFixed(1) : '0.0'
+}
+
+const getWeatherIcon = (temp) => {
+  if (temp === null) return '🌡️'
+  if (temp <= 0) return '❄️'
+  if (temp <= 10) return '🌥️'
+  if (temp <= 20) return '☀️'
+  return '🌡️'
 }
 
 onMounted(async () => {
@@ -67,21 +85,84 @@ onMounted(async () => {
 
 <style scoped>
 .current-weather {
-  text-align: center;
-  padding: 2rem;
-  width: 80%;
-  margin-bottom: 2rem;
+  background: var(--section-bg, white);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
-.weather-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-.weather-table th,
-.weather-table td {
-  border: 1px solid #ccc;
+
+.weather-card-content {
+  display: grid;
+  gap: 2rem;
   padding: 1rem;
-  text-align: center;
-  font-size: 1.2rem;
+}
+
+.temperature-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.temp-number {
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.weather-icon {
+  font-size: 3rem;
+}
+
+.weather-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+}
+
+.label {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  opacity: 0.8;
+}
+
+.value-wrapper {
+  position: relative;
+  width: 50%;
+}
+
+.progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background: var(--primary-color);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .temp-number {
+    font-size: 3rem;
+  }
+
+  .weather-icon {
+    font-size: 2rem;
+  }
 }
 </style>
