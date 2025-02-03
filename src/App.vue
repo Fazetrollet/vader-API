@@ -1,13 +1,15 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import CurrentWeather from './components/CurrentWeather.vue'
 import WeeklyWeather from './components/WeeklyWeather.vue'
 import VideoPlayer from './components/VideoPlayer.vue'
 
-const darkMode = ref(window.matchMedia('(prefers-color-scheme: dark)').matches)
-const scrollToSection = (id) => {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-}
+const darkMode = ref(false)
+
+onMounted(() => {
+  darkMode.value = window.matchMedia('(prefers-color-scheme: dark)').matches
+  document.body.classList.toggle('dark-mode', darkMode.value)
+})
 
 const toggleDarkMode = () => {
   darkMode.value = !darkMode.value
@@ -20,32 +22,23 @@ const toggleDarkMode = () => {
     <header>
       <div class="header-content">
         <h1>Åland Weather</h1>
-        <button class="theme-toggle" @click="toggleDarkMode">
+        <button class="theme-toggle" @click="toggleDarkMode" aria-label="Toggle dark mode">
           {{ darkMode ? '☀️' : '🌙' }}
         </button>
       </div>
-      <nav>
-        <ul>
-          <li @click="scrollToSection('current-section')">Today</li>
-          <li @click="scrollToSection('weekly-section')">Week</li>
-          <li @click="scrollToSection('video-section')">Live</li>
-        </ul>
-      </nav>
     </header>
 
     <main>
-      <div class="grid-container">
-        <section id="current-section" class="weather-section">
+      <div class="grid-layout">
+        <div class="weather-card">
           <CurrentWeather />
-        </section>
-
-        <section id="weekly-section" class="weather-section">
+        </div>
+        <div class="weather-card">
           <WeeklyWeather />
-        </section>
-
-        <section id="video-section" class="weather-section full-width">
+        </div>
+        <div class="weather-card video-container">
           <VideoPlayer videoId="y0ChIkyJavE" />
-        </section>
+        </div>
       </div>
     </main>
   </div>
@@ -53,34 +46,26 @@ const toggleDarkMode = () => {
 
 <style scoped>
 .app-container {
-  min-height: 100vh;
+  min-height: 100dvh;
   background: var(--bg-color, #f5f5f5);
-  transition: all 0.3s ease;
-}
-
-.dark-mode {
-  --bg-color: #1a1a1a;
-  --text-color: #ffffff;
-  --section-bg: #2d2d2d;
-  color: var(--text-color);
+  transition: background-color 0.3s ease;
 }
 
 header {
-  background: linear-gradient(135deg, #42b983, #369f6b);
-  padding: 1rem;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) 1rem env(safe-area-inset-left);
   position: sticky;
   top: 0;
-  z-index: 1000;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 10;
 }
 
 .header-content {
+  max-width: min(90%, 1400px);
+  margin: 0 auto;
+  padding: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
 }
 
 .theme-toggle {
@@ -90,76 +75,66 @@ header {
   cursor: pointer;
   padding: 0.5rem;
   border-radius: 50%;
-  transition: transform 0.3s ease;
-}
-
-.theme-toggle:hover {
-  transform: scale(1.1);
-}
-
-nav ul {
-  display: flex;
-  justify-content: center;
-  gap: clamp(1rem, 4vw, 2rem);
-  padding: 0;
-  margin: 1rem 0;
-  list-style: none;
-}
-
-nav li {
-  cursor: pointer;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-  font-weight: 500;
-}
-
-nav li:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
+  transition: transform 0.2s ease;
 }
 
 main {
-  max-width: 1400px;
+  padding: 1rem;
+  max-width: min(90%, 1400px);
   margin: 0 auto;
-  padding: 2rem;
 }
 
-.grid-container {
+.grid-layout {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  align-items: start;
+  gap: 1.5rem;
+  padding: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
 }
 
-.weather-section {
+.weather-card {
   background: var(--section-bg, white);
   border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
 }
 
-.weather-section:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-}
-
-.full-width {
+.video-container {
   grid-column: 1 / -1;
 }
 
 @media (max-width: 768px) {
-  .grid-container {
-    grid-template-columns: 1fr;
-  }
-  
-  header {
+  .header-content {
     padding: 0.5rem;
   }
-  
-  nav ul {
-    flex-wrap: wrap;
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .grid-layout {
+    gap: 1rem;
+    padding: 0.5rem;
+  }
+
+  .weather-card {
+    padding: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-layout {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (hover: hover) {
+  .weather-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .theme-toggle:hover {
+    transform: scale(1.1);
   }
 }
 
@@ -168,3 +143,10 @@ main {
     transition: none !important;
   }
 }
+
+@container (min-width: 600px) {
+  .weather-card {
+    padding: 2rem;
+  }
+}
+</style>
